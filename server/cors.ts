@@ -2,8 +2,17 @@
 export function allowedOrigins(): string[] {
   return (process.env.ALLOWED_ORIGINS ?? '')
     .split(',')
-    .map((origin) => origin.trim().replace(/\/$/, ''))
-    .filter(Boolean)
+    .map((entry) => toOrigin(entry.trim()))
+    .filter((origin): origin is string => origin !== null)
+}
+
+/** Accepts full URLs too ("https://x.github.io/repo/") — browsers send only scheme + host. */
+function toOrigin(value: string): string | null {
+  try {
+    return value ? new URL(value).origin : null
+  } catch {
+    return null
+  }
 }
 
 export function isOriginAllowed(origin: string | null): origin is string {

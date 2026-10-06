@@ -107,3 +107,11 @@ describe('handleOptions', () => {
     expect(preflight('https://evil.example').status).toBe(403)
   })
 })
+
+describe('ALLOWED_ORIGINS parsing', () => {
+  it('accepts entries written as full URLs with a path', async () => {
+    vi.stubEnv('ALLOWED_ORIGINS', ' https://imicadio.github.io/pdf-insight/ , not a url')
+    const response = await handleAnalyze(post(validBody), deps())
+    expect(response.status).toBe(200)
+  })
+})
