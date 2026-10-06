@@ -1,0 +1,51 @@
+{
+  "document": {
+    "fileName": "umowa-serwisowa.pdf",
+    "pages": 1,
+    "language": "pl",
+    "type": "umowa",
+    "title": "UMOWA SERWISOWA nr 14/2026",
+    "date": "2026-09-01"
+  },
+  "summary": "Dokument jest umową serwisową nr 14/2026 zawartą 1 września 2026 r. w Warszawie pomiędzy Przykład sp. z o.o. jako Zleceniodawcą a Serwis-Tech S.A. jako Wykonawcą. Zleceniodawcę reprezentuje Jan Kowalski. Wykonawca zobowiązuje się do świadczenia usług serwisowych sprzętu IT przez okres 12 miesięcy za miesięczne wynagrodzenie 12 500,00 zł netto. Umowa określa termin płatności do 10. dnia każdego miesiąca oraz czas reakcji na zgłoszenie (SLA) wynoszący 48 godzin.",
+  "keyPoints": [
+    "Usługi serwisowe sprzętu IT świadczone przez 12 miesięcy",
+    "Wynagrodzenie miesięczne: 12 500,00 zł netto",
+    "Płatność do 10. dnia każdego miesiąca",
+    "Pierwsza płatność przypada na 1 października 2026 r.",
+    "Czas reakcji na zgłoszenie (SLA): 48 godzin"
+  ],
+  "entities": {
+    "organizations": ["Przykład sp. z o.o.", "Serwis-Tech S.A."],
+    "people": ["Jan Kowalski"]
+  },
+  "amounts": [
+    {
+      "value": 12500,
+      "currency": "PLN",
+      "context": "wynagrodzenie miesięczne netto"
+    }
+  ],
+  "dates": [
+    {
+      "date": "2026-10-01",
+      "context": "pierwsza płatność"
+    }
+  ],
+  "keywords": [
+    "umowa serwisowa",
+    "serwis sprzętu IT",
+    "wynagrodzenie miesięczne",
+    "SLA",
+    "czas reakcji 48 godzin",
+    "Zleceniodawca",
+    "Wykonawca",
+    "12 miesięcy"
+  ],
+  "meta": {
+    "model": "claude-opus-5-5",
+    "analyzedAt": "2026-10-06T06:45:29.859Z",
+    "chunks": 1,
+    "truncated": false
+  }
+}
