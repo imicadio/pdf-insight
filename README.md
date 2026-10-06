@@ -21,7 +21,7 @@ GitHub Pages (React + Vite, statyczne pliki)
   │  POST { fileName, pages, text }
   ▼
 Vercel Function  api/analyze.ts
-  │  CORS (allowlista) → rate limit (Upstash) → walidacja body (Zod)
+  │  CORS (allowlista) → rate limit → walidacja body (Zod)
   │  krótki tekst: 1 wywołanie · długi: fragmenty równolegle + reduce + merge
   │  walidacja odpowiedzi (Zod) → 1 ponowna próba → błąd
   ▼
@@ -57,7 +57,7 @@ server/        handler, prompt, claude (SDK + retry), chunk/merge, cors, rateLim
 
 - Klucz `ANTHROPIC_API_KEY` istnieje wyłącznie w zmiennych środowiskowych Vercel. Frontend zna tylko publiczny `VITE_API_URL`. `.env` jest w `.gitignore`.
 - CORS: tylko originy z `ALLOWED_ORIGINS` (demo + localhost); żądania z innych originów (lub bez nagłówka `Origin`) dostają 403, zanim cokolwiek trafi do AI.
-- Limity: 5 analiz/min i 30/dzień na IP oraz 500/dzień globalnie (Upstash Redis); body ≤ 4 MB, tekst ≤ 600 tys. znaków, plik ≤ 10 MB. Dodatkowo limit wydatków ustawiony w Anthropic Console.
+- Limity w dwóch warstwach: **Vercel Firewall** (reguła rate limit na `POST /api/analyze`, liczona na brzegu, zanim żądanie dotrze do funkcji) oraz limiter w funkcji: 5 analiz/min i 30/dzień na IP, 500/dzień globalnie (w pamięci instancji; opcjonalnie współdzielony przez Upstash Redis). Do tego body ≤ 4 MB, tekst ≤ 600 tys. znaków, plik ≤ 10 MB i limit wydatków w Anthropic Console.
 - Prompt injection: treść PDF jest w znacznikach `<document>` jako dane (zamykający tag w treści jest neutralizowany), system prompt każe ignorować polecenia z dokumentu, model nie ma narzędzi, a wynik jest ograniczony schematem i walidowany.
 - Brak `dangerouslySetInnerHTML` — wszystko renderowane jako tekst przez React. Błędy serwera nie ujawniają szczegółów.
 - Interfejs informuje, że tekst trafia do zewnętrznego API AI.
@@ -82,13 +82,13 @@ npm run dev                 # frontend na http://localhost:5173/pdf-insight/
 
 ### Zmienne środowiskowe
 
-| Zmienna                                              | Gdzie                      | Opis                                                  |
-| ---------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| `VITE_API_URL`                                       | GitHub Actions → Variables | Publiczny adres backendu (np. `https://….vercel.app`) |
-| `ANTHROPIC_API_KEY`                                  | Vercel (sekret)            | Klucz Anthropic API                                   |
-| `ANTHROPIC_MODEL`                                    | Vercel (opcjonalnie)       | Domyślnie `claude-opus-5-5`                           |
-| `ALLOWED_ORIGINS`                                    | Vercel                     | Np. `https://imicadio.github.io`                      |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Vercel (sekret)            | Rate limiting; wymagane w produkcji                   |
+| Zmienna                                              | Gdzie                        | Opis                                                         |
+| ---------------------------------------------------- | ---------------------------- | ------------------------------------------------------------ |
+| `VITE_API_URL`                                       | GitHub Actions → Variables   | Publiczny adres backendu (np. `https://….vercel.app`)        |
+| `ANTHROPIC_API_KEY`                                  | Vercel (sekret)              | Klucz Anthropic API                                          |
+| `ANTHROPIC_MODEL`                                    | Vercel (opcjonalnie)         | Domyślnie `claude-opus-5-5`                                  |
+| `ALLOWED_ORIGINS`                                    | Vercel                       | Np. `https://imicadio.github.io`                             |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Vercel (sekret), opcjonalnie | Współdzielony rate limit; bez nich limit w pamięci instancji |
 
 ## Deploy
 
